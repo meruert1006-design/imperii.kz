@@ -29,7 +29,7 @@ API будет доступен на `http://localhost:5000/api`.
 
 ### Backend (`backend/.env`)
 - `PORT=5000`
-- `DATABASE_URL="file:./dev.db"`
+- `DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/DB_NAME?schema=public"`
 - `JWT_SECRET=your-secret-key-here`
 - `ALLOW_ADMIN_REGISTER=true`
 - `CORS_ORIGIN=http://localhost:5173`
@@ -40,17 +40,18 @@ API будет доступен на `http://localhost:5000/api`.
 ## Деплой (рекомендуемый вариант)
 
 ### Backend на Render
-1. Создайте новый **Web Service** из репозитория
-2. Build command:
+1. Создайте PostgreSQL базу в Render
+2. Создайте новый **Web Service** из репозитория (root: `backend`)
+3. Build command:
    - `npm install && npx prisma generate && npx prisma migrate deploy`
-3. Start command:
+4. Start command:
    - `npm start`
-4. Добавьте переменные окружения:
-   - `DATABASE_URL=file:/var/data/dev.db`
+5. Добавьте переменные окружения:
+   - `DATABASE_URL` (из Render PostgreSQL)
    - `JWT_SECRET=...`
-   - `ALLOW_ADMIN_REGISTER=false` (после создания админа)
-   - `CORS_ORIGIN=https://ВАШ-ДОМЕН`
-5. Подключите **Persistent Disk** и укажите путь `/var/data`
+   - `ALLOW_ADMIN_REGISTER=true` (на время первичной регистрации)
+   - `CORS_ORIGIN=https://imperii.kz`
+6. Подключите домен `api.imperii.kz` в Render и получите CNAME для DNS
 
 ### Frontend на Vercel
 1. Импортируйте проект из репозитория
@@ -58,7 +59,16 @@ API будет доступен на `http://localhost:5000/api`.
 3. Build command: `npm run build`
 4. Output directory: `dist`
 5. Переменная окружения:
-   - `VITE_API_URL=https://URL-ВАШЕГО-BACKEND/api`
+   - `VITE_API_URL=https://api.imperii.kz/api`
+6. Подключите домены `imperii.kz` и `www.imperii.kz` в Vercel
+
+### DNS в PS.kz
+1. Добавьте записи для `imperii.kz` и `www` по инструкции Vercel
+2. Добавьте `CNAME` для `api` на цель, выданную Render
+
+## Важно
+
+- При переходе на PostgreSQL данные из SQLite не переносятся автоматически
 
 ## SEO и домен
 
