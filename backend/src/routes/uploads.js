@@ -11,25 +11,37 @@ import { uploadImage } from '../controllers/uploadController.js';
 const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const uploadDir = process.env.UPLOADS_DIR
-  ? path.resolve(process.env.UPLOADS_DIR)
-  : path.join(__dirname, '..', '..', 'uploads');
+const useCloudinary = Boolean(
+  process.env.CLOUDINARY_URL ||
+    (process.env.CLOUDINARY_CLOUD_NAME &&
+      process.env.CLOUDINARY_API_KEY &&
+      process.env.CLOUDINARY_API_SECRET)
+);
 
-// Ensure uploads folder exists
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
+let upload;
+if (useCloudinary) {
+  upload = multer({ storage: multer.memoryStorage() });
+} else {
+  const uploadDir = process.env.UPLOADS_DIR
+    ? path.resolve(process.env.UPLOADS_DIR)
+    : path.join(__dirname, '..', '..', 'uploads');
 
-const storage = multer.diskStorage({
-  destination: uploadDir,
-  filename: (req, file, cb) => {
-    const timestamp = Date.now();
-    const safeName = file.originalname.replace(/\s+/g, '-').toLowerCase();
-    cb(null, `${timestamp}-${safeName}`);
+  // Ensure uploads folder exists
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
   }
-});
 
-const upload = multer({ storage });
+  const storage = multer.diskStorage({
+    destination: uploadDir,
+    filename: (req, file, cb) => {
+      const timestamp = Date.now();
+      const safeName = file.originalname.replace(/\s+/g, '-').toLowerCase();
+      cb(null, `${timestamp}-${safeName}`);
+    }
+  });
+
+  upload = multer({ storage });
+}
 
 router.post('/', requireAuth, upload.single('image'), uploadImage);
 // Public upload for reviews (no auth)
