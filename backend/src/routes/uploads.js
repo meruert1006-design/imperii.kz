@@ -11,7 +11,9 @@ import { uploadImage } from '../controllers/uploadController.js';
 const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const uploadDir = path.join(__dirname, '..', '..', 'uploads');
+const uploadDir = process.env.UPLOADS_DIR
+  ? path.resolve(process.env.UPLOADS_DIR)
+  : path.join(__dirname, '..', '..', 'uploads');
 
 // Ensure uploads folder exists
 if (!fs.existsSync(uploadDir)) {
