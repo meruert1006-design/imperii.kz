@@ -27,11 +27,11 @@ if (useCloudinary && !cloudinaryConfigured) {
   cloudinaryConfigured = true;
 }
 
-const uploadToCloudinary = (fileBuffer) =>
+const uploadToCloudinary = (fileBuffer, options = {}) =>
   new Promise((resolve, reject) => {
     const folder = process.env.CLOUDINARY_FOLDER || 'imperii';
     const stream = cloudinary.uploader.upload_stream(
-      { folder, resource_type: 'image' },
+      { folder, resource_type: 'auto', ...options },
       (error, result) => {
         if (error) {
           reject(error);
@@ -57,7 +57,8 @@ export const uploadImage = async (req, res) => {
       });
     } catch (error) {
       console.error('Cloudinary upload failed', error);
-      return res.status(500).json({ error: 'Cloud upload failed' });
+      const detail = error?.message || 'Cloud upload failed';
+      return res.status(500).json({ error: detail });
     }
   }
 
