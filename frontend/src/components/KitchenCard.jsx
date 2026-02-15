@@ -39,14 +39,17 @@ export default function KitchenCard({ kitchen }) {
             {kitchen.priceDiscount ? (
               <>
                 <span className="block text-red-600 font-semibold">
-                  Со скидкой {kitchen.discountPercent ? `${kitchen.discountPercent}%` : ''}:{' '}
+                  Цена со скидкой {kitchen.discountPercent ? `${kitchen.discountPercent}%` : ''}:{' '}
                   {formatPrice(kitchen.priceDiscount)} тг
                 </span>
-                {kitchen.priceOriginal && (
-                  <span className="block text-red-500">
-                    Основная цена: {formatPrice(kitchen.priceOriginal)} тг
-                  </span>
-                )}
+                <span className="block text-red-500">
+                  Основная цена:{' '}
+                  {kitchen.priceOriginal
+                    ? `${formatPrice(kitchen.priceOriginal)} тг`
+                    : kitchen.priceFrom
+                      ? `от ${formatPrice(kitchen.priceFrom)} тг`
+                      : 'по запросу'}
+                </span>
               </>
             ) : (
               <span className="block text-red-600 font-semibold">

@@ -89,14 +89,17 @@ export default function KitchenDetails() {
             {kitchen.priceDiscount ? (
               <div className="mt-3 space-y-1 text-sm">
                 <p className="text-red-600 font-semibold">
-                  Со скидкой {kitchen.discountPercent ? `${kitchen.discountPercent}%` : ''}:{' '}
+                  Цена со скидкой {kitchen.discountPercent ? `${kitchen.discountPercent}%` : ''}:{' '}
                   {formatPrice(kitchen.priceDiscount)} тг
                 </p>
-                {kitchen.priceOriginal && (
-                  <p className="text-red-500">
-                    Основная цена: {formatPrice(kitchen.priceOriginal)} тг
-                  </p>
-                )}
+                <p className="text-red-500">
+                  Основная цена:{' '}
+                  {kitchen.priceOriginal
+                    ? `${formatPrice(kitchen.priceOriginal)} тг`
+                    : kitchen.priceFrom
+                      ? `от ${formatPrice(kitchen.priceFrom)} тг`
+                      : 'по запросу'}
+                </p>
               </div>
             ) : (
               <p className="mt-2 text-sm text-slate-600">
