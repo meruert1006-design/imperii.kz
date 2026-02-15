@@ -21,6 +21,9 @@ export default function Footer() {
           <Link to="/about" className="block text-slate-300 hover:text-white">
             О компании
           </Link>
+          <Link to="/guarantee" className="block text-slate-300 hover:text-white">
+            Гарантия и доставка
+          </Link>
           <Link to="/contact" className="block text-slate-300 hover:text-white">
             Контакты
           </Link>

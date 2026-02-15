@@ -7,6 +7,7 @@ const navLinks = [
   { path: '/', label: 'Главная' },
   { path: '/kitchens', label: 'Каталог' },
   { path: '/about', label: 'О компании' },
+  { path: '/guarantee', label: 'Гарантия и доставка' },
   { path: '/contact', label: 'Контакты' }
 ];
 

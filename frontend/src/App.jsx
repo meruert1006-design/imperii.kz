@@ -10,6 +10,7 @@ import KitchenDetails from './pages/KitchenDetails';
 import RequestPage from './pages/RequestPage';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import GuaranteeDelivery from './pages/GuaranteeDelivery';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminRegister from './pages/admin/AdminRegister';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -37,6 +38,7 @@ function App() {
           <Route path="/kitchens/:id" element={<KitchenDetails />} />
           <Route path="/request" element={<RequestPage />} />
           <Route path="/about" element={<About />} />
+          <Route path="/guarantee" element={<GuaranteeDelivery />} />
           <Route path="/contact" element={<Contact />} />
         </Route>
 
