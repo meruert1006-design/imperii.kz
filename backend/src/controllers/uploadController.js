@@ -11,12 +11,19 @@ const useCloudinary = Boolean(
 
 let cloudinaryConfigured = false;
 if (useCloudinary && !cloudinaryConfigured) {
-  cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-    secure: true
-  });
+  if (process.env.CLOUDINARY_URL) {
+    cloudinary.config({
+      cloudinary_url: process.env.CLOUDINARY_URL,
+      secure: true
+    });
+  } else {
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET,
+      secure: true
+    });
+  }
   cloudinaryConfigured = true;
 }
 
@@ -49,6 +56,7 @@ export const uploadImage = async (req, res) => {
         filename: result.public_id
       });
     } catch (error) {
+      console.error('Cloudinary upload failed', error);
       return res.status(500).json({ error: 'Cloud upload failed' });
     }
   }
