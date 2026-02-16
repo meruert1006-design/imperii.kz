@@ -66,9 +66,6 @@ export default function Catalog() {
             <p className="text-sm text-slate-600">Выберите стиль, материалы и стоимость.</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs font-medium uppercase tracking-wide text-slate-400">
-              Фильтры
-            </span>
             <button
               className={`rounded-full px-4 py-2 text-sm ${
                 !activeCategory ? 'bg-orange-500 text-white' : 'border border-slate-200 text-slate-600'
@@ -76,46 +73,6 @@ export default function Catalog() {
               onClick={() => setActiveCategory(null)}
             >
               Все
-            </button>
-            <button
-              className={`rounded-full px-4 py-2 text-sm ${
-                isActiveName('Фасады')
-                  ? 'bg-orange-500 text-white'
-                  : 'border border-slate-200 text-slate-600'
-              }`}
-              onClick={() => setCategoryByName('Фасады')}
-            >
-              Фасады
-            </button>
-            <button
-              className={`rounded-full px-4 py-2 text-sm ${
-                isActiveName('Кухни')
-                  ? 'bg-orange-500 text-white'
-                  : 'border border-slate-200 text-slate-600'
-              }`}
-              onClick={() => setCategoryByName('Кухни')}
-            >
-              Кухни
-            </button>
-            <button
-              className={`rounded-full px-4 py-2 text-sm ${
-                isActiveName('Шкафы')
-                  ? 'bg-orange-500 text-white'
-                  : 'border border-slate-200 text-slate-600'
-              }`}
-              onClick={() => setCategoryByName('Шкафы')}
-            >
-              Шкафы
-            </button>
-            <button
-              className={`rounded-full px-4 py-2 text-sm ${
-                isActiveName('Тумбочки')
-                  ? 'bg-orange-500 text-white'
-                  : 'border border-slate-200 text-slate-600'
-              }`}
-              onClick={() => setCategoryByName('Тумбочки')}
-            >
-              Тумбочки
             </button>
             {categories.map((category) => (
               <button
