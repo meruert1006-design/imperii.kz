@@ -61,6 +61,7 @@ export const createKitchen = async (req, res, next) => {
       priceDiscount,
       discountPercent,
       videoUrl,
+      instagramUrl,
       categoryId,
       materialIds,
       facadeIds,
@@ -75,6 +76,7 @@ export const createKitchen = async (req, res, next) => {
         priceDiscount: priceDiscount ? Number(priceDiscount) : null,
         discountPercent: discountPercent ? Number(discountPercent) : null,
         videoUrl: videoUrl || null,
+        instagramUrl: instagramUrl || null,
         categoryId: categoryId ? Number(categoryId) : null,
         images: imageUrls?.length
           ? { create: imageUrls.map((url) => ({ url })) }
@@ -111,6 +113,7 @@ export const updateKitchen = async (req, res, next) => {
       priceDiscount,
       discountPercent,
       videoUrl,
+      instagramUrl,
       categoryId,
       materialIds,
       facadeIds,
@@ -127,6 +130,7 @@ export const updateKitchen = async (req, res, next) => {
         priceDiscount: priceDiscount ? Number(priceDiscount) : null,
         discountPercent: discountPercent ? Number(discountPercent) : null,
         videoUrl: videoUrl || null,
+        instagramUrl: instagramUrl || null,
         categoryId: categoryId ? Number(categoryId) : null
       }
     });

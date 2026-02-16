@@ -10,6 +10,12 @@ const formatPrice = (value) => {
   return Number(value).toLocaleString('ru-RU');
 };
 
+const getInstagramEmbedUrl = (url) => {
+  if (!url) return '';
+  const cleaned = url.replace(/\?.*$/, '').replace(/\/$/, '');
+  return `${cleaned}/embed`;
+};
+
 export default function KitchenDetails() {
   const { id } = useParams();
   const [kitchen, setKitchen] = useState(null);
@@ -43,6 +49,7 @@ export default function KitchenDetails() {
   }
 
   const images = kitchen.images?.length ? kitchen.images : [{ url: '/placeholder.jpg' }];
+  const instagramEmbedUrl = getInstagramEmbedUrl(kitchen.instagramUrl);
 
   return (
     <section className="py-10">
@@ -154,6 +161,17 @@ export default function KitchenDetails() {
                 controls
                 className="w-full rounded-xl border border-slate-200"
                 src={resolveImageUrl(kitchen.videoUrl)}
+              />
+            </div>
+          )}
+          {instagramEmbedUrl && (
+            <div className="pt-2">
+              <iframe
+                title="Instagram"
+                src={instagramEmbedUrl}
+                className="w-full rounded-xl border border-slate-200"
+                style={{ minHeight: '460px' }}
+                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
               />
             </div>
           )}

@@ -13,6 +13,7 @@ const emptyForm = {
   priceDiscount: '',
   discountPercent: '',
   videoUrl: '',
+  instagramUrl: '',
   categoryId: '',
   materialIds: [],
   facadeIds: [],
@@ -48,6 +49,15 @@ export default function AdminKitchens() {
   const handleChange = (event) => {
     const { name, value } = event.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const normalizeInstagramUrl = (value) => {
+    if (!value) return '';
+    const match = value.match(/https?:\/\/www\.instagram\.com\/[^"'\s]+/);
+    if (match) {
+      return match[0].replace(/\?.*$/, '');
+    }
+    return value.trim();
   };
 
   const handleMaterialToggle = (id) => {
@@ -108,6 +118,7 @@ export default function AdminKitchens() {
       priceDiscount: kitchen.priceDiscount || '',
       discountPercent: kitchen.discountPercent || '',
       videoUrl: kitchen.videoUrl || '',
+      instagramUrl: kitchen.instagramUrl || '',
       categoryId: kitchen.category?.id || '',
       materialIds: kitchen.materials?.map((mat) => mat.id) || [],
       facadeIds: kitchen.facades?.map((facade) => facade.id) || [],
@@ -133,6 +144,7 @@ export default function AdminKitchens() {
         priceDiscount: form.priceDiscount ? Number(form.priceDiscount) : undefined,
         discountPercent: form.discountPercent ? Number(form.discountPercent) : undefined,
         videoUrl: form.videoUrl || undefined,
+        instagramUrl: normalizeInstagramUrl(form.instagramUrl) || undefined,
         categoryId: form.categoryId ? Number(form.categoryId) : undefined,
         materialIds: form.materialIds,
         facadeIds: form.facadeIds,
@@ -274,6 +286,19 @@ export default function AdminKitchens() {
           />
         </div>
         <div>
+          <label className="text-sm font-medium text-slate-700">Instagram (ссылка)</label>
+          <input
+            name="instagramUrl"
+            value={form.instagramUrl}
+            onChange={handleChange}
+            placeholder="https://www.instagram.com/reel/..."
+            className="mt-2 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
+          />
+          <p className="mt-1 text-xs text-slate-500">
+            Можно вставить ссылку или embed-код — мы возьмём правильный URL.
+          </p>
+        </div>
+        <div>
           <label className="text-sm font-medium text-slate-700">Категория</label>
           <select
             name="categoryId"
@@ -347,27 +372,33 @@ export default function AdminKitchens() {
           <div className="mt-2 flex items-center gap-2 text-sm text-slate-500">
             <input type="file" accept="image/*" onChange={handleUpload} />
           </div>
-          <div className="mt-2 flex items-center gap-2 text-sm text-slate-500">
-            <input
-              type="file"
-              accept="video/*"
-              onChange={async (event) => {
-                const file = event.target.files?.[0];
-                if (!file) return;
-                try {
-                  const response = await uploadImage(file);
-                  setForm((prev) => ({ ...prev, videoUrl: response.url }));
-                  setStatus({ loading: false, error: '', success: 'Видео загружено.' });
-                } catch (error) {
-                  setStatus({
-                    loading: false,
-                    error: error.response?.data?.error || 'Не удалось загрузить видео',
-                    success: ''
-                  });
-                }
-              }}
-            />
-          </div>
+        <div className="mt-2 flex flex-col gap-2 text-sm text-slate-500">
+          <label className="text-sm font-medium text-slate-700">Видео (файл)</label>
+          <input
+            type="file"
+            accept="video/mp4,video/webm,video/*"
+            onChange={async (event) => {
+              const file = event.target.files?.[0];
+              if (!file) return;
+              try {
+                const response = await uploadImage(file);
+                setForm((prev) => ({ ...prev, videoUrl: response.url }));
+                setStatus({ loading: false, error: '', success: 'Видео загружено.' });
+              } catch (error) {
+                setStatus({
+                  loading: false,
+                  error: error.response?.data?.error || 'Не удалось загрузить видео',
+                  success: ''
+                });
+              }
+            }}
+          />
+          {form.videoUrl && (
+            <video className="w-full max-w-xs rounded-lg border border-slate-200" controls>
+              <source src={resolveImageUrl(form.videoUrl)} />
+            </video>
+          )}
+        </div>
           {form.imageUrls.length > 0 && (
             <div className="mt-3 flex flex-wrap gap-2">
               {form.imageUrls.map((url) => (
